@@ -1,20 +1,21 @@
-# Use the official Node.js image as the base image
-FROM node:14
+FROM node:20-alpine
 
-# Set the working directory inside the container
+# Create app directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
+# Install app dependencies
 COPY package*.json ./
-
-# Install application dependencies
 RUN npm install
 
-# Copy the rest of the application code to the working directory
+# Bundle app source
 COPY . .
 
-# Expose the port the application runs on
+# Create a .env file to store environment variables at build time (optional)
+# (You would typically set these through environment variables or docker-compose)
+RUN touch .env
+
+# Expose the port the app runs on
 EXPOSE 3000
 
-# Define the command to run the application
-CMD ["node", "app.js"]
+# Command to run the app
+CMD ["npm", "start"]
